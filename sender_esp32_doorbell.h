@@ -36,16 +36,16 @@
 
 // WiFi-instellingen
 const char* ssid = "Scouternet_Attick_24";                    // <<< Vul uw WiFi-netwerknaam in
-const char* password = "22832115";          // <<< Vul uw WiFi-wachtwoord in
+const char* password = "pwd";          // <<< Vul uw WiFi-wachtwoord in
 
 // Netwerkinstellingen (statische IP)
-IPAddress gateway(192, 168, 2, 254);                  // IP van uw router
+IPAddress gateway(192, 168, 170, 1);                  // IP van uw router
 IPAddress subnet(255, 255, 255, 0);                   // Subnet mask
 IPAddress dns(8, 8, 8, 8);                            // Google DNS (fallback)
 
 // Statische IP-adressen voor de ESP32's
-IPAddress ip_sender(192, 168, 2, 201);                // Zender (voordeur)
-IPAddress ip_receiver(192, 168, 2, 202);              // Ontvanger (zolder)
+IPAddress ip_sender(192, 168, 170, 201);                // Zender (voordeur)
+IPAddress ip_receiver(192, 168, 170, 202);              // Ontvanger (zolder)
 
 // UDP-instellingen
 const int udpPort = 4210;                             // Poort voor communicatie
