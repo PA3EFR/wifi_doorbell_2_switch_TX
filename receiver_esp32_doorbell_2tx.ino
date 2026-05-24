@@ -25,7 +25,7 @@
 
 // WiFi-instellingen
 const char* ssid = "Scouternet_Attick_24";              // WiFi netwerknaam
-const char* password = "22832115";                      // WiFi wachtwoord
+const char* password = "pwd";                      // WiFi wachtwoord
 
 // Statische IP configuratie
 IPAddress gateway(192, 168, 170, 1);                    // Router IP
