@@ -1,0 +1,42 @@
+Uitleg: Hoe een Nieuwe Melodie Toevoegen
+Om een nieuwe melodie toe te voegen, moet u 4_delen aanpassen:
+
+Stap	Wat te doen	Voorbeeld KEY
+1	Payload definiëren	const char* keyPayload = "KEY";
+2	Melodie array maken	const Note KEY_MELODY[] = {...}
+3	Lengte berekenen	const int KEY_MELODY_LENGTH = sizeof(...)
+4	Signal check toevoegen	else if (strcmp(...) == 0)
+Aangepaste Code
+Ik pas de ontvanger code aan met KEY melodie en gedetailleerde comments:
+
+receiver_esp32_doorbell.h
+
+Samenvatting: Zo Voegt U Een Nieuwe Melodie Toe### Stap 1: Payload Definieren (regel ~46)
+cpp
+const char* keyPayload = "KEY";  // Naam die UDP signaal stuurt
+Stap 2: Melodie Definiëren (na regel ~95)
+cpp
+// KEY Melodie: C4, C5 (4x herhaling)
+// Elke noot 200ms: 2 noten = 400ms, 4x = 1600ms totaal
+const Note KEY_MELODY[] = {
+    {NOTE_C4, 200},     // C4 - 200ms
+    {NOTE_C5, 200}      // C5 - 200ms
+};
+
+const int KEY_MELODY_LENGTH = sizeof(KEY_MELODY) / sizeof(KEY_MELODY[0]);
+Stap 3: Signal Check Toevoegen (in checkForUdpPacket)
+cpp
+else if (strcmp(packetBuffer, keyPayload) == 0) {
+    Serial.println(">>> KEY SIGNAAL ONTVANGEN! <<<");
+    startMelody(KEY_MELODY, KEY_MELODY_LENGTH, 4, "KEY");
+    sendAck();
+    startDoorbellIndicator();
+}
+Stap 4: Bericht Bij Opstarten (optioneel)
+cpp
+Serial.println("  - KEY: C4, C5 (4x)");
+Belangrijk: Herhalingen
+In startMelody() is de derde parameter het aantal herhalingen:
+
+startMelody(RING_MELODY, RING_MELODY_LENGTH, 1, "RING") → 1x- startMelody(PONG_MELODY, PONG_MELODY_LENGTH, 2, "PONG") → 2x
+startMelody(KEY_MELODY, KEY_MELODY_LENGTH, 4, "KEY") → 4x
