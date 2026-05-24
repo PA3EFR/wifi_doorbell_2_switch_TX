@@ -1,0 +1,3 @@
+After I disconnected the transmitter (for private reasons) and tried to hook it up afterwards, the UDP packets did not get to the receiver anymore.
+
+The solution lies in the router: once the transmitter was gone, the router was unable to direct the QSL signal. After a reset of the router, the system worked again.
