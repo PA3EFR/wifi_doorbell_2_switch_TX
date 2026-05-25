@@ -44,6 +44,7 @@ const int udpPort = 4210;
 const char* ringPayload = "RING";                       
 const char* pongPayload = "PONG";                       
 const char* keyPayload = "KEY";       // <-- NIEUWE MELODIE
+//const char* sssPayload = "SSS";     // format voor nieuwe melodie
 const char* ackPayload = "QSL";                         
 
 // ============================================
@@ -59,13 +60,24 @@ const int NETWORK_LED_PIN = 23;                         // Netwerk status LED op
 // ============================================
 
 // Frequenties in Hz (A4 = 440 Hz standaard)
-const int NOTE_C4 = 262;                                // Midden C (Do)
-const int NOTE_E4 = 330;                                // E (Mi)
-const int NOTE_G4 = 392;                                // G (Sol)
-const int NOTE_C5 = 523;                                // Hoge C (Do octaaf hoger)
-const int NOTE_F4 = 349;                                // F (Fa)
-const int NOTE_A4 = 440;                                // A (La)
-const int NOTE_F5 = 698;                                // Hoge F (Fa octaaf hoger)
+
+// Octaaf 4
+const int NOTE_C4 = 262;   // C (Do)
+const int NOTE_D4 = 294;   // D (Re)
+const int NOTE_E4 = 330;   // E (Mi)
+const int NOTE_F4 = 349;   // F (Fa)
+const int NOTE_G4 = 392;   // G (Sol)
+const int NOTE_A4 = 440;   // A (La)
+const int NOTE_B4 = 494;   // B (Si)
+
+// Octaaf 5
+const int NOTE_C5 = 523;   // Hoge C
+const int NOTE_D5 = 587;   // Hoge D
+const int NOTE_E5 = 659;   // Hoge E
+const int NOTE_F5 = 698;   // Hoge F
+const int NOTE_G5 = 784;   // Hoge G
+const int NOTE_A5 = 880;   // Hoge A
+const int NOTE_B5 = 988;   // Hoge B
 
 // Note structuur: {frequentie, duur_in_ms}
 struct Note {
@@ -105,11 +117,20 @@ const int PONG_MELODY_LENGTH = sizeof(PONG_MELODY) / sizeof(PONG_MELODY[0]);
 // ============================================
 // MELODIE 3: KEY (NIEUW!)
 // ============================================
-// C4, C5 (4x herhaling, totaal ~1.6 seconden)
+// C4, C5 (4x herhaling)
 const Note KEY_MELODY[] = {
-    {NOTE_C4, 200},     // C4 - 200ms
-    {NOTE_C5, 200}      // C5 - 200ms
+    {NOTE_C4, 200},     // C4 - 100ms
+    {NOTE_C5, 200}      // C5 - 100ms
 };
+
+// ============================================
+// MELODIE X: SSS (format!)
+// ============================================
+// C4, C5 (4x herhaling)
+//const Note SSS_MELODY[] = {
+//    {NOTE_G4, 100},     // C4 - 50ms
+//    {NOTE_G5, 200}      // C5 - 100ms
+//};
 
 const int KEY_MELODY_LENGTH = sizeof(KEY_MELODY) / sizeof(KEY_MELODY[0]);
 
@@ -228,6 +249,7 @@ void setup() {
     Serial.println("  - RING: Standaard melodie (C, E, G, High C)");
     Serial.println("  - PONG: Alternatieve melodie (F4, A4, C4, F5, C4, A4, F4, 2x)");
     Serial.println("  - KEY: Extra melodie (C4, C5, 4x)");
+//    Serial.println("   - SSS: format melodie");
     Serial.println();
     Serial.println("Systeem is klaar voor gebruik!");
     Serial.println();
@@ -307,6 +329,13 @@ void checkForUdpPacket() {
             sendAck();
             startDoorbellIndicator();
         }
+        // Check of het een SSS signaal is <-- format
+//      else if (strcmp(packetBuffer, sssPayload) == 0) {
+//            Serial.println(">>> SSS SIGNAAL ONTVANGEN! <<<");
+//            startMelody(SSS_MELODY, SSS_MELODY_LENGTH, 4, "SSS");
+//            sendAck();
+//            startDoorbellIndicator();
+//        }
         // Onbekend signaal
         else {
             Serial.print("Onbekend signaal: ");
@@ -347,6 +376,8 @@ void startMelody(const Note* melody, int length, int repetitions, const char* me
             Serial.println("         *** PONG PONG! ***           ");
         } else if (strcmp(melodyName, "KEY") == 0) {
             Serial.println("         *** KEY KEY! ***            ");
+//        } else if (strcmp(melodyName, "SSS") == 0) {
+//            Serial.println("         *** SSS SSS! ***            ");     // format
         } else {
             Serial.print("         *** ");
             Serial.print(melodyName);
